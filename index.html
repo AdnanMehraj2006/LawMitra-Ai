@@ -1,0 +1,2806 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description"
+    content="LawMitra AI - Instant AI legal guidance, citizen rights, and complaint drafts for everyday legal issues in India." />
+  <meta name="theme-color" content="#0b1120" />
+
+  <title>LawMitra AI | Legal Guidance for Everyday Problems</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..900;1,9..40,300..900&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --brand: #3b82f6;
+      --brand-dark: #2563eb;
+      --brand-light: #60a5fa;
+      --brand-soft: rgba(59, 130, 246, 0.12);
+      --brand-glow: rgba(59, 130, 246, 0.28);
+      --accent: #10b981;
+      --accent-soft: rgba(16, 185, 129, 0.12);
+      --warning: #f59e0b;
+      --warning-soft: rgba(245, 158, 11, 0.12);
+      --danger: #ef4444;
+      --bg: #0b1120;
+      --bg-alt: #0f172a;
+      --card: #131d33;
+      --card-hover: #182542;
+      --card-surface: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #1e293b;
+      --border-light: rgba(148, 163, 184, 0.14);
+      --border-focus: #3b82f6;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-lg: 18px;
+      --radius-full: 9999px;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.38);
+      --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.24);
+      --shadow-glow: 0 0 32px rgba(59, 130, 246, 0.22);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+    }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    body.is-landing {
+      height: auto;
+      overflow-y: auto;
+    }
+
+    body:not(.is-landing) {
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* APP TRANSITION & CONTAINERS */
+    .landing-page {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      opacity: 1;
+      position: relative;
+      transform: translateY(0) scale(1);
+      transition: opacity .45s ease, transform .5s cubic-bezier(.2, .8, .2, 1), filter .45s ease, visibility .45s ease;
+      visibility: visible;
+      z-index: 4;
+    }
+
+    .landing-page::before,
+    .landing-page::after,
+    .app::before {
+      border-radius: 999px;
+      content: "";
+      filter: blur(80px);
+      opacity: .28;
+      pointer-events: none;
+      position: fixed;
+      z-index: 0;
+    }
+
+    .landing-page::before {
+      background: #2563eb;
+      height: 340px;
+      left: 5%;
+      top: 15%;
+      width: 340px;
+    }
+
+    .landing-page::after {
+      background: #6366f1;
+      bottom: 15%;
+      height: 380px;
+      right: 5%;
+      width: 380px;
+    }
+
+    .app {
+      display: flex;
+      height: 100vh;
+      height: 100dvh;
+      inset: 0;
+      opacity: 1;
+      position: fixed;
+      transform: translateY(0) scale(1);
+      transition: opacity .45s ease, transform .5s cubic-bezier(.2, .8, .2, 1), filter .45s ease, visibility .45s ease;
+      visibility: visible;
+      z-index: 5;
+      background: var(--bg);
+    }
+
+    .app::before {
+      background: #2563eb;
+      height: 320px;
+      right: 12%;
+      top: 30%;
+      width: 320px;
+    }
+
+    body.is-landing .app {
+      filter: blur(10px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(32px) scale(.985);
+      visibility: hidden;
+    }
+
+    body.is-chat .landing-page {
+      filter: blur(12px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-24px) scale(.99);
+      visibility: hidden;
+      height: 0;
+      overflow: hidden;
+    }
+
+    .view-loader {
+      align-items: center;
+      background: rgba(11, 17, 32, 0.75);
+      backdrop-filter: blur(16px);
+      display: flex;
+      inset: 0;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      position: fixed;
+      transition: opacity .25s ease, visibility .25s ease;
+      visibility: hidden;
+      z-index: 999;
+    }
+
+    body.is-transitioning .view-loader {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .view-loader span {
+      animation: loaderPulse 1s ease-in-out infinite;
+      background: rgba(19, 29, 51, 0.9);
+      border: 1px solid rgba(96, 165, 250, 0.35);
+      border-radius: var(--radius-full);
+      box-shadow: 0 16px 60px rgba(37, 99, 235, 0.25);
+      color: #dbeafe;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 14px 24px;
+    }
+
+    @keyframes loaderPulse {
+
+      0%,
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: .88;
+      }
+
+      50% {
+        transform: translateY(-2px) scale(1.02);
+        opacity: 1;
+      }
+    }
+
+    /* =========================================
+       LANDING PAGE (HOME) STYLES
+       ========================================= */
+    .landing-nav {
+      align-items: center;
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      height: 68px;
+      justify-content: space-between;
+      padding: 0 clamp(16px, 4vw, 48px);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .landing-brand {
+      align-items: center;
+      display: flex;
+      gap: 10px;
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      transition: opacity .2s ease;
+    }
+
+    .landing-brand:hover {
+      opacity: .9;
+    }
+
+    .brand-symbol {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+    }
+
+    .landing-links {
+      align-items: center;
+      display: flex;
+      gap: clamp(12px, 2.5vw, 24px);
+    }
+
+    .landing-link {
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      transition: color .2s ease;
+      padding: 6px 4px;
+    }
+
+    .landing-link:hover,
+    .landing-link:focus-visible {
+      color: var(--text);
+      outline: none;
+    }
+
+    .landing-nav-cta {
+      align-items: center;
+      background: var(--brand);
+      border-radius: var(--radius-full);
+      color: white;
+      display: inline-flex;
+      font-size: 13px;
+      font-weight: 700;
+      gap: 6px;
+      padding: 9px 18px;
+      transition: background-color .2s ease, transform .2s ease, box-shadow .2s ease;
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.28);
+    }
+
+    .landing-nav-cta:hover,
+    .landing-nav-cta:focus-visible {
+      background: var(--brand-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+      outline: none;
+    }
+
+    /* HERO SECTION */
+    .landing-hero {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      min-height: calc(88vh - 68px);
+      padding: clamp(60px, 10vw, 110px) clamp(16px, 4vw, 32px);
+      text-align: center;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .landing-inner {
+      margin: 0 auto;
+      max-width: 1080px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .landing-narrow {
+      max-width: 800px;
+    }
+
+    .landing-trust {
+      align-items: center;
+      background: var(--brand-soft);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: var(--radius-full);
+      color: var(--brand-light);
+      display: inline-flex;
+      font-size: 12px;
+      font-weight: 700;
+      gap: 8px;
+      margin-bottom: 24px;
+      padding: 6px 16px;
+      letter-spacing: 0.02em;
+    }
+
+    .landing-trust span {
+      font-size: 14px;
+    }
+
+    .landing-hero h1 {
+      color: var(--text);
+      font-size: clamp(38px, 6.5vw, 68px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      margin-bottom: 24px;
+    }
+
+    .landing-hero h1 span {
+      background: linear-gradient(135deg, #60a5fa 10%, #a78bfa 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: block;
+    }
+
+    .landing-hero p {
+      color: var(--text-muted);
+      font-size: clamp(16px, 2.2vw, 20px);
+      line-height: 1.6;
+      margin: 0 auto 36px;
+      max-width: 660px;
+    }
+
+    .landing-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .landing-btn {
+      align-items: center;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: inline-flex;
+      font-size: 15px;
+      font-weight: 700;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 28px;
+      transition: all .2s ease;
+      justify-content: center;
+    }
+
+    .landing-btn.primary {
+      background: var(--brand);
+      color: white;
+      box-shadow: 0 8px 28px rgba(59, 130, 246, 0.32);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .landing-btn.primary:hover,
+    .landing-btn.primary:focus-visible {
+      background: var(--brand-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 34px rgba(59, 130, 246, 0.45);
+      outline: none;
+    }
+
+    .landing-btn.secondary {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .landing-btn.secondary:hover,
+    .landing-btn.secondary:focus-visible {
+      background: var(--card-hover);
+      border-color: rgba(96, 165, 250, 0.4);
+      color: var(--brand-light);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    /* SECTIONS */
+    .landing-section {
+      padding: clamp(64px, 8vw, 100px) clamp(16px, 4vw, 32px);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      text-align: center;
+    }
+
+    .landing-section:nth-of-type(even) {
+      background: rgba(15, 23, 42, 0.45);
+    }
+
+    .landing-section h2 {
+      color: var(--text);
+      font-size: clamp(28px, 4.5vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .landing-subtitle {
+      color: var(--text-muted);
+      font-size: clamp(15px, 1.8vw, 17px);
+      line-height: 1.6;
+      margin: 0 auto 44px;
+      max-width: 620px;
+    }
+
+    /* TOPIC GRID */
+    .landing-topic-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      text-align: left;
+    }
+
+    .landing-topic-grid button {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      padding: 24px;
+      transition: all .25s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .landing-topic-grid button:hover,
+    .landing-topic-grid button:focus-visible {
+      background: var(--card-hover);
+      border-color: var(--brand);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+      outline: none;
+    }
+
+    .topic-icon {
+      align-items: center;
+      background: var(--brand-soft);
+      border-radius: 10px;
+      color: var(--brand-light);
+      display: inline-flex;
+      font-size: 18px;
+      height: 42px;
+      justify-content: center;
+      margin-bottom: 18px;
+      width: 42px;
+    }
+
+    .landing-topic-grid strong {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: block;
+      color: var(--text);
+    }
+
+    .landing-topic-grid small {
+      color: var(--text-muted);
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+
+    /* STEPS GRID */
+    .landing-step-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      text-align: center;
+    }
+
+    .landing-step-grid article {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .landing-step-grid article span {
+      align-items: center;
+      background: #10244a;
+      border: 6px solid #162a52;
+      border-radius: var(--radius-full);
+      color: var(--brand-light);
+      display: inline-flex;
+      font-size: 22px;
+      font-weight: 900;
+      height: 72px;
+      justify-content: center;
+      margin-bottom: 24px;
+      width: 72px;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+    }
+
+    .landing-step-grid h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .landing-step-grid p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* VOICE & MULTILINGUAL */
+    .landing-voice {
+      align-items: center;
+      display: grid;
+      gap: clamp(32px, 6vw, 64px);
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      text-align: left;
+    }
+
+    .landing-window {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      min-height: 200px;
+      overflow: hidden;
+      padding: 44px 24px 24px;
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+
+    .landing-window-bar {
+      align-items: center;
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      height: 36px;
+      left: 0;
+      padding-left: 16px;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    .landing-window-bar span {
+      border-radius: 999px;
+      height: 10px;
+      width: 10px;
+    }
+
+    .landing-window-bar span:nth-child(1) {
+      background: #ef4444;
+    }
+
+    .landing-window-bar span:nth-child(2) {
+      background: #f59e0b;
+    }
+
+    .landing-window-bar span:nth-child(3) {
+      background: #22c55e;
+    }
+
+    .landing-window i {
+      background: #1e2a3f;
+      border-radius: 6px;
+      display: block;
+      height: 14px;
+      margin: 16px 0;
+    }
+
+    .landing-window i:nth-of-type(1) {
+      width: 75%;
+    }
+
+    .landing-window i:nth-of-type(2) {
+      width: 45%;
+    }
+
+    .landing-window i:nth-of-type(3) {
+      background: var(--brand);
+      margin-left: 25%;
+      width: 70%;
+    }
+
+    .landing-window i:nth-of-type(4) {
+      background: var(--brand-dark);
+      margin-left: 48%;
+      width: 45%;
+    }
+
+    .landing-checks {
+      display: grid;
+      gap: 16px;
+      list-style: none;
+      margin-top: 24px;
+    }
+
+    .landing-checks li {
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.6;
+      padding-left: 28px;
+      position: relative;
+    }
+
+    .landing-checks li::before {
+      color: var(--accent);
+      content: "✓";
+      font-weight: 900;
+      left: 0;
+      position: absolute;
+      font-size: 17px;
+    }
+
+    /* TESTIMONIALS */
+    .landing-testimonials {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      text-align: left;
+    }
+
+    .landing-testimonials article {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .landing-testimonials span.quote-mark {
+      color: var(--brand-light);
+      display: block;
+      font-size: 36px;
+      line-height: 1;
+      margin-bottom: 14px;
+      font-family: serif;
+    }
+
+    .landing-testimonials p {
+      color: var(--text);
+      font-size: 14.5px;
+      font-style: italic;
+      line-height: 1.65;
+      margin-bottom: 24px;
+    }
+
+    .landing-testimonials strong {
+      display: block;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .landing-testimonials small {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    /* FAQ */
+    .landing-faq {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .landing-faq article {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 26px;
+      margin-bottom: 14px;
+      transition: border-color .2s ease;
+    }
+
+    .landing-faq article:hover {
+      border-color: rgba(96, 165, 250, 0.35);
+    }
+
+    .landing-faq h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .landing-faq p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* FOOTER */
+    .landing-footer {
+      background: rgba(11, 17, 32, 0.95);
+      border-top: 1px solid var(--border);
+      padding: 48px clamp(16px, 4vw, 48px) 36px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .footer-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer-links a,
+    .footer-links button {
+      color: var(--text-muted);
+      font-size: 13.5px;
+      font-weight: 600;
+      transition: color .2s ease;
+    }
+
+    .footer-links a:hover,
+    .footer-links button:hover {
+      color: var(--brand-light);
+    }
+
+    .footer-disclaimer {
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.6;
+      max-width: 640px;
+      opacity: .8;
+    }
+
+    .footer-copy {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    /* =========================================
+       CHAT APPLICATION VIEW STYLES
+       ========================================= */
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 45;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+
+    .sidebar-backdrop.is-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sidebar {
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      width: 290px;
+      z-index: 50;
+      flex-shrink: 0;
+      transition: transform .3s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .sidebar-top {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .new-chat-btn {
+      align-items: center;
+      background: var(--brand);
+      border-radius: var(--radius);
+      color: white;
+      display: flex;
+      font-size: 14px;
+      font-weight: 700;
+      gap: 8px;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 16px;
+      width: 100%;
+      transition: all .2s ease;
+    }
+
+    .new-chat-btn:hover,
+    .new-chat-btn:focus-visible {
+      background: var(--brand-dark);
+      outline: none;
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+    }
+
+    .sidebar-close-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 20px;
+    }
+
+    .sidebar-close-btn:hover {
+      color: var(--text);
+      background: var(--card-hover);
+    }
+
+    .sidebar-history {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 12px;
+    }
+
+    .history-settings {
+      border-top: 1px solid var(--border);
+      padding: 12px;
+    }
+
+    .history-settings-toggle,
+    .history-setting-action {
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 700;
+      min-height: 38px;
+      padding: 8px 10px;
+      text-align: left;
+      width: 100%;
+    }
+
+    .history-settings-toggle:hover,
+    .history-settings-toggle:focus-visible,
+    .history-setting-action:hover,
+    .history-setting-action:focus-visible {
+      background: var(--card-hover);
+      color: var(--text);
+      outline: none;
+    }
+
+    .history-settings-panel {
+      padding: 10px 4px 2px;
+    }
+
+    .history-settings-panel p {
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.45;
+      margin: 0 4px 8px;
+    }
+
+    .history-settings-panel label,
+    .catalog-admin summary {
+      color: var(--text-muted);
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin: 10px 4px 5px;
+    }
+
+    .history-settings-panel select,
+    .history-settings-panel textarea {
+      background: var(--card-hover);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font: inherit;
+      margin-bottom: 8px;
+      padding: 8px;
+      width: 100%;
+    }
+
+    .catalog-admin {
+      margin-top: 10px;
+    }
+
+    .history-setting-action.is-primary {
+      background: var(--brand);
+      color: white;
+      text-align: center;
+    }
+
+    .history-setting-action.is-danger {
+      color: #fca5a5;
+    }
+
+    .history-consent-modal {
+      align-items: center;
+      background: rgba(2, 6, 23, 0.72);
+      backdrop-filter: blur(7px);
+      display: flex;
+      inset: 0;
+      justify-content: center;
+      padding: 20px;
+      position: fixed;
+      z-index: 120;
+    }
+
+    .history-consent-modal[hidden] {
+      display: none;
+    }
+
+    .history-consent-card {
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      max-width: 460px;
+      padding: 24px;
+      width: 100%;
+    }
+
+    .history-consent-card h2 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .history-consent-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .history-consent-card p + p {
+      margin-top: 10px;
+    }
+
+    .history-consent-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .history-consent-actions button {
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      min-height: 42px;
+      padding: 0 16px;
+    }
+
+    .history-consent-actions .save-history-btn {
+      background: var(--brand);
+      color: white;
+    }
+
+    .history-consent-actions .not-now-btn {
+      background: var(--card-surface);
+      color: var(--text);
+    }
+
+    .history-consent-actions button:hover,
+    .history-consent-actions button:focus-visible {
+      filter: brightness(1.1);
+      outline: 2px solid var(--brand-light);
+      outline-offset: 2px;
+    }
+
+    .history-title {
+      color: var(--text-muted);
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin: 16px 8px 8px;
+      text-transform: uppercase;
+    }
+
+    .history-title:first-child {
+      margin-top: 4px;
+    }
+
+    .history-empty {
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 8px 8px 16px;
+    }
+
+    .history-item {
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1.4;
+      margin-bottom: 4px;
+      padding: 9px 10px;
+      text-align: left;
+      transition: all .15s ease;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+
+    .history-item:hover,
+    .history-item:focus-visible {
+      background: var(--brand-soft);
+      border-color: rgba(59, 130, 246, 0.25);
+      color: var(--brand-light);
+      outline: none;
+    }
+
+    .chat-history-item {
+      color: var(--text);
+    }
+
+    .chat-history-row {
+      align-items: center;
+      display: flex;
+      gap: 2px;
+      margin-bottom: 4px;
+    }
+
+    .chat-history-row .history-item {
+      flex: 1;
+      margin-bottom: 0;
+      min-width: 0;
+    }
+
+    .delete-chat-btn,
+    .copy-message-btn {
+      align-items: center;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      flex-shrink: 0;
+      font-size: 12px;
+      font-weight: 700;
+      justify-content: center;
+      min-height: 36px;
+      min-width: 36px;
+      padding: 6px 8px;
+      transition: opacity .15s ease, background .15s ease, color .15s ease;
+    }
+
+    .delete-chat-btn:hover,
+    .delete-chat-btn:focus-visible {
+      background: rgba(239, 68, 68, 0.14);
+      color: #fca5a5;
+      outline: none;
+    }
+
+    .copy-message-btn:hover,
+    .copy-message-btn:focus-visible {
+      background: var(--brand-soft);
+      color: var(--brand-light);
+      outline: none;
+    }
+
+    /* MAIN CHAT PANE */
+    .main {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-width: 0;
+      position: relative;
+      height: 100%;
+    }
+
+    .topbar {
+      align-items: center;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      height: 60px;
+      justify-content: space-between;
+      padding: 0 clamp(12px, 3vw, 24px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      flex-shrink: 0;
+    }
+
+    .topbar-left {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .sidebar-toggle-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 16px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .sidebar-toggle-btn:hover {
+      background: var(--card-hover);
+      border-color: var(--brand);
+    }
+
+    .bot-avatar {
+      align-items: center;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      border-radius: 999px;
+      color: white;
+      display: flex;
+      font-size: 14px;
+      height: 30px;
+      justify-content: center;
+      width: 30px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 10px rgba(59, 130, 246, 0.35);
+    }
+
+    .bot-info {
+      min-width: 0;
+    }
+
+    .bot-info h2 {
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .brand-name-short {
+      display: none;
+    }
+
+    .bot-info p {
+      color: var(--text-muted);
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .topbar-actions {
+      align-items: center;
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .topbar-link {
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      font-size: 12.5px;
+      font-weight: 600;
+      gap: 6px;
+      height: 34px;
+      padding: 0 12px;
+      transition: all .2s ease;
+      white-space: nowrap;
+    }
+
+    .topbar-link:hover,
+    .topbar-link:focus-visible {
+      background: var(--card-hover);
+      border-color: rgba(96, 165, 250, 0.3);
+      color: var(--text);
+      outline: none;
+    }
+
+    .topbar-link.dashboard-btn {
+      color: var(--brand-light);
+      background: var(--brand-soft);
+      border-color: rgba(59, 130, 246, 0.25);
+    }
+
+    .topbar-link.dashboard-btn:hover {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: var(--brand);
+    }
+
+    .topbar-link.new-chat-quick {
+      display: none;
+      background: var(--brand);
+      border-color: var(--brand);
+      color: white;
+      font-weight: 700;
+    }
+
+    .topbar-link.new-chat-quick:hover {
+      background: var(--brand-dark);
+    }
+
+    /* CHAT AREA */
+    .chat-area {
+      background: var(--bg);
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 22px;
+      overflow-y: auto;
+      padding: clamp(16px, 3vw, 32px) clamp(12px, 4vw, 40px);
+      scroll-padding-bottom: 24px;
+    }
+
+    .welcome {
+      margin: 0 auto;
+      max-width: 980px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .chat-welcome-panel {
+      align-items: center;
+      animation: chatWelcomeIn .5s cubic-bezier(.2, .8, .2, 1) both;
+      background: rgba(19, 29, 51, 0.6);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(14px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(32px, 5vw, 48px) clamp(16px, 4vw, 36px);
+      box-shadow: var(--shadow);
+      margin-bottom: 32px;
+    }
+
+    .welcome-icon {
+      align-items: center;
+      animation: floatLogo 4s ease-in-out infinite;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(99, 102, 241, 0.2));
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 20px;
+      box-shadow: 0 12px 36px rgba(59, 130, 246, 0.2);
+      color: var(--brand-light);
+      display: flex;
+      font-size: 38px;
+      height: 72px;
+      justify-content: center;
+      margin: 0 auto 24px;
+      width: 72px;
+    }
+
+    .chat-welcome-panel h1 {
+      color: var(--text);
+      font-size: clamp(24px, 4vw, 34px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .chat-welcome-panel p {
+      color: var(--text-muted);
+      font-size: clamp(14px, 1.8vw, 16.5px);
+      margin-bottom: 32px;
+      max-width: 600px;
+    }
+
+    .prompt-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 0 auto 24px;
+      max-width: 820px;
+      width: 100%;
+      text-align: left;
+    }
+
+    .prompt-grid button {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 14.5px;
+      line-height: 1.45;
+      padding: 14px 18px;
+      text-align: left;
+      transition: all .2s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .prompt-grid button:hover,
+    .prompt-grid button:focus-visible {
+      background: var(--card-hover);
+      border-color: var(--brand);
+      color: var(--brand-light);
+      transform: translateY(-2px);
+      outline: none;
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.18);
+    }
+
+    .welcome-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .welcome-actions .section-action {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--brand-light);
+      border-radius: var(--radius-sm);
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all .2s ease;
+    }
+
+    .welcome-actions .section-action:hover {
+      background: var(--brand-soft);
+      border-color: var(--brand);
+    }
+
+    .welcome-section {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      scroll-margin-top: 16px;
+      text-align: left;
+    }
+
+    .section-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .section-row h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .section-row p {
+      color: var(--text-muted);
+      font-size: 13.5px;
+      margin-top: 4px;
+    }
+
+    .section-action {
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--brand-light);
+      cursor: pointer;
+      display: inline-flex;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 14px;
+      transition: all .2s ease;
+      white-space: nowrap;
+    }
+
+    .section-action:hover,
+    .section-action:focus-visible {
+      background: var(--card-hover);
+      border-color: var(--brand);
+      outline: none;
+    }
+
+    /* CASE CATALOG */
+    .catalog-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      text-align: left;
+    }
+
+    .catalog-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      min-height: 120px;
+      padding: 16px;
+      text-align: left;
+      transition: all .2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .catalog-card:hover,
+    .catalog-card:focus-visible {
+      background: var(--card-hover);
+      border-color: var(--brand);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      outline: none;
+    }
+
+    .category-label {
+      align-self: flex-start;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: var(--radius-full);
+      color: var(--accent);
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      padding: 3px 8px;
+      text-transform: uppercase;
+    }
+
+    .catalog-card strong {
+      color: var(--text);
+      display: block;
+      font-size: 14.5px;
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+
+    .catalog-card span {
+      color: var(--text-muted);
+      display: -webkit-box;
+      font-size: 12.5px;
+      line-height: 1.45;
+      overflow: hidden;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+
+    /* NEARBY HELP */
+    .help-layout {
+      text-align: left;
+    }
+
+    .contact-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .contact-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .contact-card strong {
+      color: var(--text);
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .contact-card p {
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .contact-action {
+      align-items: center;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      font-size: 12px;
+      font-weight: 700;
+      gap: 6px;
+      min-height: 32px;
+      padding: 6px 12px;
+      text-decoration: none;
+      transition: all .2s ease;
+    }
+
+    .contact-action:hover,
+    .contact-action:focus-visible {
+      border-color: var(--brand);
+      color: var(--brand-light);
+      background: var(--brand-soft);
+      outline: none;
+    }
+
+    .external-map-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-top: 16px;
+      padding: 16px;
+    }
+
+    .external-map-panel p {
+      color: var(--text-muted);
+      font-size: 12.5px;
+      margin: 0 0 12px;
+    }
+
+    .map-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .map-action {
+      align-items: center;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      font-size: 12px;
+      font-weight: 700;
+      min-height: 32px;
+      padding: 6px 12px;
+      transition: all .2s ease;
+    }
+
+    .map-action:hover,
+    .map-action:focus-visible,
+    .map-action.is-active {
+      background: var(--brand-soft);
+      border-color: var(--brand);
+      color: var(--brand-light);
+      outline: none;
+    }
+
+    .map-open-link {
+      color: var(--brand-light);
+      display: inline-flex;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 14px;
+      text-decoration: none;
+    }
+
+    .map-open-link:hover,
+    .map-open-link:focus-visible {
+      text-decoration: underline;
+    }
+
+    /* MESSAGES */
+    .msg-user-wrap {
+      align-items: flex-end;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      justify-content: flex-end;
+      width: 100%;
+    }
+
+    .msg-user {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      border-radius: 18px 18px 4px 18px;
+      color: white;
+      font-size: 15px;
+      line-height: 1.55;
+      max-width: min(80%, 720px);
+      padding: 12px 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+    }
+
+    .msg-ai-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      max-width: 980px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .ai-avatar {
+      align-items: center;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.2));
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 999px;
+      color: var(--brand-light);
+      display: flex;
+      flex-shrink: 0;
+      font-size: 16px;
+      height: 36px;
+      justify-content: center;
+      margin-top: 2px;
+      width: 36px;
+    }
+
+    .ai-response {
+      flex: 1;
+      min-width: 0;
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .delete-chat-btn {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .copy-message-btn {
+        display: none;
+      }
+
+      .chat-history-row:hover .delete-chat-btn,
+      .chat-history-row:focus-within .delete-chat-btn {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .msg-user-wrap:hover .copy-message-btn,
+      .msg-user-wrap:focus-within .copy-message-btn {
+        display: inline-flex;
+      }
+    }
+
+    .response-lead {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: var(--radius);
+      color: #fbbf24;
+      font-size: 14.5px;
+      margin-bottom: 16px;
+      padding: 14px 18px;
+    }
+
+    .response-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      padding: 18px 20px;
+    }
+
+    .response-section.is-rights {
+      background: rgba(59, 130, 246, 0.08);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .response-heading {
+      align-items: center;
+      color: var(--brand-light);
+      display: flex;
+      font-size: 16.5px;
+      font-weight: 800;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .response-icon {
+      display: inline-flex;
+      font-size: 16px;
+    }
+
+    .ai-response p {
+      color: var(--text);
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .ai-response p:last-child {
+      margin-bottom: 0;
+    }
+
+    .ai-response ul,
+    .ai-response ol {
+      list-style: none;
+      padding-left: 0;
+      margin: 8px 0;
+    }
+
+    .ai-response li {
+      color: var(--text);
+      font-size: 14.5px;
+      margin-bottom: 10px;
+      padding-left: 36px;
+      position: relative;
+      line-height: 1.55;
+    }
+
+    .ai-response li::before {
+      align-items: center;
+      background: var(--brand-soft);
+      border-radius: 999px;
+      color: var(--brand-light);
+      content: "•";
+      display: flex;
+      font-size: 13px;
+      font-weight: 800;
+      height: 24px;
+      justify-content: center;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 24px;
+    }
+
+    .ai-response ol,
+    .response-section.is-steps ul {
+      counter-reset: action-step;
+    }
+
+    .ai-response ol li,
+    .response-section.is-steps ul li {
+      counter-increment: action-step;
+    }
+
+    .ai-response ol li::before,
+    .response-section.is-steps ul li::before {
+      content: counter(action-step);
+      font-size: 12px;
+    }
+
+    .response-section.is-contacts ul {
+      display: grid;
+      gap: 10px;
+    }
+
+    .response-section.is-contacts li {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0;
+      padding: 12px 14px;
+      flex-wrap: wrap;
+    }
+
+    .response-section.is-contacts li::before {
+      content: none;
+    }
+
+    .response-section.is-contacts li strong {
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .response-section.is-contacts li a {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--brand-light);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 5px 10px;
+      text-decoration: none;
+    }
+
+    .draft-details {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      padding: 0 18px;
+    }
+
+    .draft-details summary {
+      color: var(--text);
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+      list-style: none;
+      padding: 14px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .draft-details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .draft-details summary::after {
+      content: "▾";
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    .draft-details[open] summary::after {
+      content: "▴";
+    }
+
+    .draft-details pre {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: #e2e8f0;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+      max-height: 320px;
+      overflow-x: auto;
+      padding: 14px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .template-title {
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      margin: 16px 0 8px;
+      text-transform: uppercase;
+    }
+
+    .ai-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      margin-top: 14px;
+    }
+
+    .suggestion-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 7px 14px;
+      transition: all .2s ease;
+    }
+
+    .suggestion-btn:hover,
+    .suggestion-btn:focus-visible {
+      background: var(--brand-soft);
+      border-color: var(--brand);
+      color: var(--brand-light);
+      outline: none;
+    }
+
+    .typing-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 13.5px;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .typing-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--brand-light);
+      animation: bounce 1s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: .2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: .4s;
+    }
+
+    /* CHAT INPUT AREA */
+    .chat-input-area {
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(18px);
+      border-top: 1px solid var(--border);
+      padding: 14px clamp(12px, 4vw, 40px) max(14px, env(safe-area-inset-bottom));
+      flex-shrink: 0;
+    }
+
+    .input-row {
+      align-items: flex-end;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      display: flex;
+      gap: 10px;
+      margin: 0 auto;
+      max-width: 980px;
+      padding: 8px 12px;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .input-row:focus-within {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 2px var(--brand-soft);
+    }
+
+    .chat-textarea {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      flex: 1;
+      font-size: 15px;
+      line-height: 1.5;
+      max-height: 140px;
+      min-height: 24px;
+      outline: none;
+      padding: 6px 4px;
+      resize: none;
+    }
+
+    .chat-textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .location-btn {
+      align-items: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      font-size: 20px;
+      height: 38px;
+      justify-content: center;
+      width: 38px;
+      border-radius: var(--radius-sm);
+      transition: color .2s ease, background-color .2s ease;
+      flex-shrink: 0;
+    }
+
+    .location-btn:hover,
+    .location-btn:focus-visible {
+      color: var(--brand-light);
+      background: var(--brand-soft);
+      outline: none;
+    }
+
+    .send-btn {
+      align-items: center;
+      background: var(--brand);
+      border-radius: 12px;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      font-size: 16px;
+      font-weight: 700;
+      height: 38px;
+      justify-content: center;
+      width: 38px;
+      transition: all .2s ease;
+      flex-shrink: 0;
+    }
+
+    .send-btn:hover,
+    .send-btn:focus-visible {
+      background: var(--brand-dark);
+      transform: scale(1.04);
+      outline: none;
+    }
+
+    .send-btn:disabled,
+    .chat-textarea:disabled,
+    .section-action:disabled,
+    .topbar-link:disabled,
+    .location-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* ANIMATIONS */
+    @keyframes chatWelcomeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes floatLogo {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        opacity: .4;
+      }
+
+      50% {
+        transform: translateY(-4px);
+        opacity: 1;
+      }
+    }
+
+    /* =========================================
+       RESPONSIVE DESIGN (CROSS-DEVICE MEDIA QUERIES)
+       ========================================= */
+
+    /* LAPTOPS & DESKTOPS (>= 1024px) */
+    @media (min-width: 1024px) {
+      .sidebar {
+        display: flex;
+        transform: translateX(0) !important;
+      }
+    }
+
+    /* TABLETS & SMALL DESKTOPS (<= 1023px) */
+    @media (max-width: 1023px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        height: 100vh;
+        height: 100dvh;
+        transform: translateX(-100%);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+      }
+
+      .sidebar.is-open {
+        transform: translateX(0);
+      }
+
+      .sidebar-close-btn {
+        display: flex;
+      }
+
+      .sidebar-toggle-btn {
+        display: flex;
+      }
+
+      .topbar-link.new-chat-quick {
+        display: inline-flex;
+      }
+
+      .landing-topic-grid,
+      .catalog-grid,
+      .landing-testimonials {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .help-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .landing-voice {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* MOBILE DEVICES (<= 768px) */
+    @media (max-width: 768px) {
+      .landing-nav {
+        height: 60px;
+        padding: 0 16px;
+      }
+
+      .landing-links {
+        gap: 8px;
+      }
+
+      .landing-link {
+        display: none;
+      }
+
+      .landing-link[href="#landing-topics"] {
+        display: inline-flex;
+        font-size: 13px;
+      }
+
+      .landing-nav-cta {
+        padding: 7px 14px;
+        font-size: 12.5px;
+      }
+
+      .landing-hero {
+        min-height: auto;
+        padding: 54px 16px 64px;
+      }
+
+      .landing-hero h1 {
+        font-size: clamp(32px, 9vw, 44px);
+      }
+
+      .landing-hero p {
+        font-size: 15.5px;
+        margin-bottom: 28px;
+      }
+
+      .landing-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .landing-btn {
+        width: 100%;
+      }
+
+      .landing-section {
+        padding: 56px 16px;
+      }
+
+      .landing-section h2 {
+        font-size: 26px;
+      }
+
+      .landing-topic-grid,
+      .landing-step-grid,
+      .landing-testimonials,
+      .prompt-grid,
+      .catalog-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        height: max(60px, calc(52px + env(safe-area-inset-top)));
+        padding: env(safe-area-inset-top) 12px 0;
+      }
+
+      .topbar-link span:not(.text-icon) {
+        display: none;
+      }
+
+      .topbar-link {
+        height: 40px;
+        justify-content: center;
+        min-width: 40px;
+        padding: 0 10px;
+        font-size: 12px;
+      }
+
+      .topbar-link.dashboard-btn {
+        display: inline-flex;
+      }
+
+      .topbar-link.new-chat-quick {
+        display: none;
+      }
+
+      .chat-area {
+        padding: 16px max(12px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+        gap: 16px;
+      }
+
+      .chat-welcome-panel {
+        padding: 28px 16px;
+        border-radius: var(--radius);
+        margin-bottom: 24px;
+      }
+
+      .welcome-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 30px;
+        margin-bottom: 18px;
+      }
+
+      .chat-welcome-panel h1 {
+        font-size: 22px;
+      }
+
+      .chat-welcome-panel p {
+        font-size: 14px;
+        margin-bottom: 22px;
+      }
+
+      .msg-user {
+        max-width: 90%;
+        font-size: 14.5px;
+        padding: 10px 14px;
+      }
+
+      .msg-ai-wrap {
+        gap: 10px;
+      }
+
+      .ai-avatar {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+      }
+
+      .response-section {
+        padding: 14px 14px;
+      }
+
+      .response-heading {
+        font-size: 15px;
+      }
+
+      .ai-response p,
+      .ai-response li {
+        font-size: 14px;
+      }
+
+      .section-action,
+      .contact-action,
+      .map-action {
+        min-height: 44px;
+      }
+    }
+
+    /* SMALL MOBILE (<= 480px) */
+    @media (max-width: 480px) {
+      .bot-info p {
+        display: none;
+      }
+
+      .topbar-actions {
+        gap: 6px;
+      }
+
+      .topbar-link {
+        padding: 0 7px;
+        min-width: 38px;
+      }
+
+      .topbar-left {
+        gap: 8px;
+      }
+
+      .welcome-actions,
+      .section-row {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .welcome-actions .section-action,
+      .section-row .section-action {
+        justify-content: center;
+        white-space: normal;
+        width: 100%;
+      }
+
+      .landing-footer {
+        padding: 36px 16px 24px;
+      }
+
+      .footer-links {
+        gap: 16px;
+      }
+    }
+
+    /* Very narrow phones: retain the brand and the three main shortcuts. */
+    @media (max-width: 360px) {
+      .topbar-actions {
+        gap: 4px;
+      }
+
+      .bot-info h2 {
+        font-size: 13px;
+      }
+
+      .brand-name-full {
+        display: none;
+      }
+
+      .brand-name-short {
+        display: inline;
+      }
+    }
+  </style>
+</head>
+
+<body class="is-landing">
+
+  <!-- =========================================
+       LANDING / HOME PAGE VIEW
+       ========================================= -->
+  <div class="landing-page" id="landing-container">
+    <header class="landing-nav">
+      <a class="landing-brand" href="#landing-home" data-landing-link aria-label="LawMitra AI Home">
+        <div class="brand-symbol" aria-hidden="true">⚖</div>
+        <span>LawMitra AI</span>
+      </a>
+
+      <nav class="landing-links" aria-label="Main Navigation">
+        <a class="landing-link" href="#landing-home" data-landing-link>Dashboard</a>
+        <a class="landing-link" href="#landing-topics">Categories</a>
+        <a class="landing-link" href="#landing-steps">How It Works</a>
+        <a class="landing-link" href="#landing-faq">FAQ</a>
+        <button class="landing-nav-cta" type="button" data-open-chat>
+          <span>Start Chat</span>
+          <span aria-hidden="true">→</span>
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- HERO SECTION -->
+      <section class="landing-hero" id="landing-home">
+        <div class="landing-inner landing-narrow">
+          <div class="landing-trust">
+            <span aria-hidden="true">🛡️</span>
+            <span>Free Legal Guidance for Citizens & Students</span>
+          </div>
+
+          <h1>
+            Understand Your Rights
+            <span>Before It's Too Late.</span>
+          </h1>
+
+          <p>
+            Instant, AI-powered legal guidance for everyday disputes in India. Landlord issues, cyber fraud, unpaid
+            salaries, consumer refunds, and more.
+          </p>
+
+          <div class="landing-actions">
+            <button class="landing-btn primary" type="button" data-open-chat>
+              <span>Start Free Chat</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <a class="landing-btn secondary" href="#landing-topics">
+              <span>Browse Legal Topics</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOPICS SECTION -->
+      <section class="landing-section" id="landing-topics">
+        <div class="landing-inner">
+          <h2>Everyday Problems, Solved.</h2>
+          <p class="landing-subtitle">
+            Select an issue to instantly explore applicable legal sections, remedies, evidence checklists, and official
+            complaint drafts.
+          </p>
+
+          <div class="landing-topic-grid">
+            <button type="button" data-prompt="I lost money in an online UPI or OTP scam">
+              <div class="topic-icon" aria-hidden="true">💳</div>
+              <strong>Cyber Fraud & UPI Scams</strong>
+              <small>Online fraud, unauthorized bank debits, phishing, and Helpline 1930 reporting.</small>
+            </button>
+
+            <button type="button" data-prompt="My landlord is not returning my security deposit">
+              <div class="topic-icon" aria-hidden="true">🏠</div>
+              <strong>Landlord & Rent Disputes</strong>
+              <small>Deposit withholding, unlawful eviction notice, lockouts, and maintenance conflict.</small>
+            </button>
+
+            <button type="button" data-prompt="My company is not paying salary or full and final dues">
+              <div class="topic-icon" aria-hidden="true">💼</div>
+              <strong>Salary & Workplace Issues</strong>
+              <small>Unpaid dues, wrongful termination, PF/Gratuity delays, and labor commissioner notices.</small>
+            </button>
+
+            <button type="button" data-prompt="A seller is refusing refund for a defective product">
+              <div class="topic-icon" aria-hidden="true">🛍️</div>
+              <strong>Consumer Rights & Refunds</strong>
+              <small>Defective products, service deficiency, false claims, and Consumer Forum (NCH) filing.</small>
+            </button>
+
+            <button type="button" data-prompt="I have an exam, college, refund, or harassment issue as a student">
+              <div class="topic-icon" aria-hidden="true">🎓</div>
+              <strong>Student & College Issues</strong>
+              <small>College fee refund refusals, certificate retention, UGC grievance, and exam disputes.</small>
+            </button>
+
+            <button type="button" data-prompt="I am facing neighbourhood nuisance, threats, or harassment">
+              <div class="topic-icon" aria-hidden="true">⚖️</div>
+              <strong>General Harassment & Nuisance</strong>
+              <small>Noise pollution, boundary disputes, intimidation, and police complaint outlines.</small>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW IT WORKS -->
+      <section class="landing-section" id="landing-steps">
+        <div class="landing-inner">
+          <h2>How LawMitra Helps You</h2>
+          <p class="landing-subtitle">From confusion to actionable legal clarity in three simple steps.</p>
+
+          <div class="landing-step-grid">
+            <article>
+              <span>1</span>
+              <h3>Describe the Problem</h3>
+              <p>Tell us what happened in plain Hindi, English, or Urdu. No confusing legal jargon needed.</p>
+            </article>
+
+            <article>
+              <span>2</span>
+              <h3>Know Your Rights</h3>
+              <p>Get an instant breakdown of relevant Indian laws, sections, penalties, and immediate remedies.</p>
+            </article>
+
+            <article>
+              <span>3</span>
+              <h3>Take Action</h3>
+              <p>Get ready-to-send complaint drafts, police outlines, and verified authority contact numbers.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- VOICE & ACCESSIBILITY -->
+      <section class="landing-section" id="landing-features">
+        <div class="landing-inner landing-voice">
+          <div class="landing-window" aria-hidden="true">
+            <div class="landing-window-bar">
+              <span></span><span></span><span></span>
+            </div>
+            <i></i><i></i><i></i><i></i>
+          </div>
+
+          <div>
+            <h2>Multilingual & Plain Language</h2>
+            <p class="landing-subtitle" style="text-align: left; margin: 0 0 20px;">
+              Access to justice shouldn't be limited by language barriers or legal terminology.
+            </p>
+            <ul class="landing-checks">
+              <li>Guides you in plain English, Hindi, and Hinglish.</li>
+              <li>Calculates statutory deadlines and evidence checklists.</li>
+              <li>Includes emergency helpline numbers and official support contacts.</li>
+              <li>Generates copy-paste email, WhatsApp, and legal notice templates.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- TESTIMONIALS -->
+      <section class="landing-section" id="landing-testimonials">
+        <div class="landing-inner">
+          <h2>Real People, Real Guidance</h2>
+          <p class="landing-subtitle">How citizens used LawMitra AI to protect their rights.</p>
+
+          <div class="landing-testimonials">
+            <article>
+              <span class="quote-mark" aria-hidden="true">“</span>
+              <p>My landlord refused to return my ₹40,000 security deposit for 2 months. LawMitra AI gave me the exact
+                legal notice draft citing tenancy laws. The deposit was returned in 48 hours.</p>
+              <div>
+                <strong>Rahul S.</strong>
+                <small>Graduate Student, Bengaluru</small>
+              </div>
+            </article>
+
+            <article>
+              <span class="quote-mark" aria-hidden="true">“</span>
+              <p>I was scammed for ₹12,000 in an online delivery scam. The app instructed me to dial 1930 immediately
+                and generated the formal cyber cell complaint text.</p>
+              <div>
+                <strong>Priya M.</strong>
+                <small>IT Professional, Pune</small>
+              </div>
+            </article>
+
+            <article>
+              <span class="quote-mark" aria-hidden="true">“</span>
+              <p>An e-commerce company refused a refund on a defective electronic gadget. The consumer protection
+                guidelines and draft letter provided by LawMitra helped resolve it quickly.</p>
+              <div>
+                <strong>Amit K.</strong>
+                <small>Delhi</small>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ SECTION -->
+      <section class="landing-section" id="landing-faq">
+        <div class="landing-inner landing-faq">
+          <h2 style="text-align: center;">Frequently Asked Questions</h2>
+          <p class="landing-subtitle" style="text-align: center;">Everything you need to know about using LawMitra AI.
+          </p>
+
+          <article>
+            <h3>Is this formal legal representation?</h3>
+            <p>No. LawMitra AI is an informational legal guidance assistant designed to educate you on applicable laws
+              and draft preliminary communications. For representation in court, always consult a licensed advocate.</p>
+          </article>
+
+          <article>
+            <h3>Is my issue information kept private?</h3>
+            <p>Yes. All conversation history and data stay strictly in your local browser session.</p>
+          </article>
+
+          <article>
+            <h3>Can I use this for court cases or urgent emergencies?</h3>
+            <p>For immediate physical danger, always call Police Helpline 112. For online financial fraud, immediately
+              call 1930. LawMitra assists with legal education, rights discovery, and complaint drafts.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- LANDING FOOTER -->
+    <footer class="landing-footer">
+      <div class="footer-inner">
+        <div class="footer-links">
+          <a href="#landing-home" data-landing-link>Dashboard</a>
+          <a href="#landing-topics">Categories</a>
+          <a href="#landing-steps">How It Works</a>
+          <button type="button" data-open-chat>Chat Assistant</button>
+          <a href="#landing-faq">FAQ</a>
+        </div>
+        <p class="footer-disclaimer">
+          Disclaimer: LawMitra AI provides legal information and self-help documentation based on Indian statutes. It
+          does not constitute attorney-client privilege or formal legal advice.
+        </p>
+        <p class="footer-copy">© 2026 LawMitra AI. Built for Citizen Empowerment.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- VIEW TRANSITION LOADER -->
+  <div class="view-loader" aria-hidden="true">
+    <span>Connecting to LawMitra AI...</span>
+  </div>
+
+  <!-- =========================================
+       CHAT APPLICATION VIEW
+       ========================================= -->
+  <div class="app">
+    <!-- MOBILE SIDEBAR BACKDROP -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="app-sidebar" aria-label="Legal case shortcuts and history">
+      <div class="sidebar-top">
+        <button class="new-chat-btn" id="new-chat-btn" type="button">
+          <span>+</span>
+          <span>New Chat</span>
+        </button>
+        <button class="sidebar-close-btn" id="sidebar-close-btn" type="button" aria-label="Close sidebar">
+          ✕
+        </button>
+      </div>
+
+      <div class="sidebar-history">
+        <div class="history-title">Recent Conversations</div>
+        <div id="chat-history-list"></div>
+
+        <div class="history-title">Legal Case Topics</div>
+        <div id="case-library-list"></div>
+      </div>
+
+      <section class="history-settings" aria-label="Chat history and privacy settings">
+        <button class="history-settings-toggle" id="history-settings-btn" type="button" aria-expanded="false"
+          aria-controls="history-settings-panel">History &amp; privacy</button>
+        <div class="history-settings-panel" id="history-settings-panel" hidden>
+          <p id="history-status"></p>
+          <button class="history-setting-action is-primary" id="enable-history-btn" type="button">Save My History</button>
+          <button class="history-setting-action" id="disable-history-btn" type="button">Stop saving history</button>
+          <button class="history-setting-action is-danger" id="delete-all-history-btn" type="button">Delete all saved history</button>
+          <label for="jurisdiction-select">Your State / UT (optional)</label>
+          <select id="jurisdiction-select">
+            <option value="">Select for local procedure</option>
+            <option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option><option>Bihar</option><option>Chhattisgarh</option><option>Goa</option><option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option><option>Jharkhand</option><option>Karnataka</option><option>Kerala</option><option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option><option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option><option>Odisha</option><option>Punjab</option><option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option><option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option><option>Andaman and Nicobar Islands</option><option>Chandigarh</option><option>Dadra and Nagar Haveli and Daman and Diu</option><option>Delhi</option><option>Jammu and Kashmir</option><option>Ladakh</option><option>Lakshadweep</option><option>Puducherry</option><option>Other State / UT</option>
+          </select>
+          <button class="history-setting-action" id="export-coverage-gaps-btn" type="button">Export coverage gaps</button>
+          <details class="catalog-admin">
+            <summary>Local catalogue admin (development only)</summary>
+            <p>Import vetted JSON case entries for this browser only. Production editing needs an authenticated backend and review workflow.</p>
+            <textarea id="custom-cases-json" rows="5" placeholder='[{"id":"example-case","category":"example","title":"Example","summary":"..."}]'></textarea>
+            <button class="history-setting-action" id="save-custom-cases-btn" type="button">Save local catalogue and reload</button>
+            <button class="history-setting-action" id="export-custom-cases-btn" type="button">Export local catalogue</button>
+          </details>
+        </div>
+      </section>
+    </aside>
+
+    <!-- MAIN CHAT COLUMN -->
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" type="button"
+            aria-label="Toggle history and cases">
+            ☰
+          </button>
+          <div class="bot-avatar" aria-hidden="true">⚖</div>
+          <div class="bot-info">
+            <h2><span class="brand-name-full">LawMitra AI</span><span class="brand-name-short" aria-hidden="true">LawMitra</span></h2>
+            <p>Citizen Legal Guidance</p>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="topbar-link dashboard-btn" type="button" data-landing-link title="Return to Dashboard">
+            <span class="text-icon" aria-hidden="true">🏠</span>
+            <span>Dashboard</span>
+          </button>
+          <a class="topbar-link" href="#case-catalog-grid" data-scroll-to-cases title="Browse all legal case types">
+            <span class="text-icon" aria-hidden="true">📑</span>
+            <span>All Cases</span>
+          </a>
+          <button class="topbar-link" id="topbar-location-btn" type="button" title="Use your location for map searches">
+            <span class="text-icon" aria-hidden="true">📍</span>
+            <span data-button-label>Location</span>
+          </button>
+          <button class="topbar-link new-chat-quick" id="topbar-new-chat" type="button" title="Start a fresh chat">
+            <span>+ New</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="chat-area" id="chat-messages" aria-live="polite">
+        <div class="welcome" id="chat-welcome">
+          <section class="chat-welcome-panel">
+            <div class="welcome-icon" aria-hidden="true">⚖</div>
+            <h1>How can LawMitra assist you today?</h1>
+            <p>Describe your issue in plain language (Hindi, English, or Urdu) or choose a common case scenario below.
+            </p>
+
+            <div class="prompt-grid" aria-label="Quick prompts">
+              <button type="button" data-prompt="My landlord is forcing me to leave at night without notice">
+                My landlord is forcing me to leave without notice
+              </button>
+              <button type="button" data-prompt="I've been scammed online in a UPI or OTP fraud">
+                I've lost money in an online UPI / OTP scam
+              </button>
+              <button type="button" data-prompt="My employer hasn't paid my salary or clearance dues">
+                My employer has withheld my salary & dues
+              </button>
+              <button type="button" data-prompt="I got a defective product and the company is refusing refund">
+                Defective product delivered and seller refused refund
+              </button>
+            </div>
+
+            <div class="welcome-actions">
+              <button class="section-action" id="current-location-btn" type="button">
+                📍 Use current location
+              </button>
+              <a class="section-action" href="#case-catalog-grid" data-scroll-to-cases>
+                📑 Browse all legal cases
+              </a>
+            </div>
+          </section>
+
+          <!-- ALL CASES CATALOG -->
+          <section class="welcome-section">
+            <div class="section-row">
+              <div>
+                <h2>All Legal Case Categories</h2>
+                <p>Select any category to inspect relevant laws, rights, evidence checklists, and ready complaint
+                  outlines.</p>
+              </div>
+            </div>
+
+            <div class="catalog-grid" id="case-catalog-grid"></div>
+          </section>
+
+          <!-- NEARBY HELP -->
+          <section class="welcome-section is-help" id="nearby-help">
+            <div class="section-row">
+              <div>
+                <h2>Nearby Legal Aid & Emergency Help</h2>
+                <p>National helplines and official support contacts for legal aid, police, and consumer matters.</p>
+              </div>
+              <button class="section-action" id="use-location-btn" type="button">
+                📍 Use my location
+              </button>
+            </div>
+
+            <div class="help-layout">
+              <div class="contact-grid" id="help-contact-list"></div>
+              <div class="external-map-panel">
+                <p>Select a service, then open Google Maps for nearby results. Maps open externally and are not embedded here.</p>
+                <div class="map-actions" id="map-actions" aria-label="External map search options"></div>
+                <a class="map-open-link" id="map-open-link"
+                  href="https://www.google.com/maps/search/?api=1&amp;query=District%20Legal%20Services%20Authority%20near%20me"
+                  target="_blank" rel="noopener noreferrer">
+                  Open selected option in Google Maps →
+                </a>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- CHAT INPUT BAR -->
+      <footer class="chat-input-area">
+        <div class="input-row">
+          <textarea id="chat-input" class="chat-textarea" placeholder="Describe your legal issue in detail..." rows="1"
+            autocomplete="off"></textarea>
+
+          <button class="send-btn" id="send-btn" type="button" title="Send message" aria-label="Send message">
+            ➤
+          </button>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <div class="history-consent-modal" id="history-consent-modal" role="dialog" aria-modal="true"
+    aria-labelledby="history-consent-title" aria-describedby="history-consent-message" hidden>
+    <div class="history-consent-card">
+      <h2 id="history-consent-title">Save your chat history?</h2>
+      <p id="history-consent-message">Save your conversations on this browser so you can return later and continue where you left off.</p>
+      <p>You can change this choice or delete your saved conversations at any time.</p>
+      <div class="history-consent-actions">
+        <button class="save-history-btn" id="consent-save-history-btn" type="button">Save My History</button>
+        <button class="not-now-btn" id="consent-not-now-btn" type="button">Not Now</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+
+</html>
