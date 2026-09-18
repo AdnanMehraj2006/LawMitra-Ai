@@ -14,6 +14,7 @@ pnpm-debug.log*
 coverage/
 dist/
 build/
+.chrome-pdf-profile/
 
 # Editor and operating-system files
 .vscode/*
