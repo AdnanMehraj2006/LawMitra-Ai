@@ -900,6 +900,15 @@
       width: 100%;
     }
 
+    .history-settings-toggle {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.38), rgba(59, 130, 246, 0.2));
+      border: 1px solid rgba(96, 165, 250, 0.62);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.2);
+      color: #dbeafe;
+      letter-spacing: 0.01em;
+      text-align: center;
+    }
+
     .history-settings-toggle:hover,
     .history-settings-toggle:focus-visible,
     .history-setting-action:hover,
@@ -907,6 +916,15 @@
       background: var(--card-hover);
       color: var(--text);
       outline: none;
+    }
+
+    .history-settings-toggle:hover,
+    .history-settings-toggle:focus-visible,
+    .history-settings-toggle[aria-expanded="true"] {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.6), rgba(59, 130, 246, 0.32));
+      border-color: #93c5fd;
+      box-shadow: 0 8px 22px rgba(37, 99, 235, 0.34);
+      color: #ffffff;
     }
 
     .history-settings-panel {
@@ -2742,7 +2760,7 @@
               </div>
             </div>
 
-            <div class="catalog-grid" id="case-catalog-grid"></div>
+            <div class="catalog-grid" id="case-catalog-grid" tabindex="-1"></div>
           </section>
 
           <!-- NEARBY HELP -->
