@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>LawMitra AI — Project Documentation</title>
+  <style>
+    @page { size: A4; margin: 16mm; }
+    :root { --navy:#102a43; --blue:#1769aa; --ink:#1f2933; --muted:#52606d; --line:#cbd5e1; --soft:#eff6ff; }
+    * { box-sizing:border-box; } body { color:var(--ink); font:10.5pt/1.5 Arial, sans-serif; margin:0; }
+    h1,h2,h3 { color:var(--navy); line-height:1.2; } h1 { font-size:28pt; margin:0 0 8pt; } h2 { border-bottom:2px solid #90cdf4; font-size:17pt; margin:24pt 0 10pt; padding-bottom:4pt; } h3 { font-size:12pt; margin:14pt 0 5pt; }
+    p { margin:6pt 0; } ul,ol { margin:6pt 0 8pt 20pt; padding:0; } li { margin:3pt 0; }
+    .cover { min-height:245mm; padding-top:54mm; text-align:center; } .subtitle { color:var(--blue); font-size:17pt; font-weight:bold; } .meta,.callout { background:var(--soft); border:1px solid #bfdbfe; margin:24pt auto; max-width:400pt; padding:14pt; text-align:left; } .callout { border-left:4px solid var(--blue); max-width:none; margin:10pt 0; }
+    .page { break-before:page; page-break-before:always; } table { border-collapse:collapse; margin:8pt 0 12pt; width:100%; } th,td { border:1px solid var(--line); padding:7pt; text-align:left; vertical-align:top; } th { background:#e6f2ff; color:var(--navy); } code { background:#eef2f7; border-radius:2pt; font:9pt Consolas, monospace; padding:1pt 3pt; } .small { color:var(--muted); font-size:9pt; } .columns { columns:2; column-gap:28pt; } .columns li { break-inside:avoid; } dt { color:var(--navy); font-weight:bold; margin-top:8pt; } dd { margin:2pt 0 0 16pt; }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <h1>LawMitra AI</h1>
+    <p class="subtitle">AI-powered Indian Legal Guidance and Case-Routing Platform</p>
+    <p>Project Documentation Report</p>
+    <div class="meta"><p><strong>Project type:</strong> Front-end web application / legal-guidance prototype</p><p><strong>Technology:</strong> HTML, CSS, JavaScript ES modules, and browser storage</p><p><strong>Purpose:</strong> Help citizens understand common legal and civic problems, preserve evidence, identify escalation routes, and create first-draft complaints.</p></div>
+    <p class="small">This project provides general information. It does not replace a qualified lawyer, legal-aid office, or emergency service.</p>
+  </section>
+
+  <section class="page">
+    <h2>1. Project Overview</h2>
+    <p>LawMitra AI is a browser-based chatbot for common Indian legal and civic questions. A user describes an issue in simple language. The system identifies the closest curated case type and returns a structured answer with possible remedies, evidence to preserve, immediate steps, contact options, official sources, and complaint drafts.</p>
+    <h3>Problems addressed</h3><ul><li>Citizens may not know which legal area applies to their problem.</li><li>They may not know what documents, screenshots, messages, or payment records to preserve.</li><li>They may need a simple starting point before approaching legal aid, a regulator, police, or a lawyer.</li></ul>
+    <h3>Main objectives</h3><ol><li>Classify common legal and civic problems safely.</li><li>Give readable and practical first guidance.</li><li>Provide evidence checklists, escalation routes, official links, and draft formats.</li><li>Keep chat history optional and browser-local.</li><li>Prioritise emergency guidance over normal case matching.</li></ol>
+    <h2>2. Technology Used</h2>
+    <table><tr><th>Area</th><th>Technology and purpose</th></tr><tr><td>Frontend</td><td>HTML5, custom CSS3, and vanilla JavaScript ES modules create the responsive landing page, chat UI, sidebar, settings, and catalogue.</td></tr><tr><td>Legal routing</td><td>Curated case data, keyword scoring, and confidence checks provide transparent and testable routing.</td></tr><tr><td>Storage</td><td>Session storage, local storage, and cookies are used only for browser-local state and opt-in history.</td></tr><tr><td>Testing</td><td>Node.js assertion tests validate routing, history consent, and safety behaviour.</td></tr></table>
+    <div class="callout"><strong>Why it is a static project:</strong> No backend or database is required to run the prototype. This keeps the setup simple and reduces server-side personal-data handling.</div>
+  </section>
+
+  <section class="page">
+    <h2>3. Working Flow</h2>
+    <ol><li>The user enters a message in the chat.</li><li>The message is normalised: lowercase, clean spaces, and reduced repeated letters.</li><li>The app checks greetings, thanks, and goodbye messages first.</li><li>It scores legal-category keywords and checks confidence.</li><li>High-confidence messages receive the closest case guidance.</li><li>Low-confidence or ambiguous messages get a safe clarification request instead of a guess.</li><li>Urgent safety messages are handled before ordinary case matching and direct the user to 112.</li></ol>
+    <h3>Important modules</h3>
+    <table><tr><th>File</th><th>Responsibility</th></tr><tr><td><code>app.js</code></td><td>UI events, chat flow, sidebar, catalogue navigation, privacy controls, and local tools.</td></tr><tr><td><code>ai/engine.js</code></td><td>Main response pipeline and emergency routing.</td></tr><tr><td><code>ai/intents.js</code></td><td>Input normalisation, keyword scoring, confidence, greetings, and fallback.</td></tr><tr><td><code>ai/cases.js</code></td><td>Curated cases plus local JSON catalogue support.</td></tr><tr><td><code>ai/responses.js</code></td><td>Guidance sections, evidence lists, and drafts.</td></tr><tr><td><code>ai/help.js</code></td><td>Helplines, maps, and official source links.</td></tr><tr><td><code>ai/history.js</code></td><td>Consent and browser-local saved history.</td></tr><tr><td><code>ai/jurisdiction.js</code></td><td>Optional State/UT context.</td></tr><tr><td><code>ai/coverage.js</code></td><td>Privacy-safe coverage-gap export.</td></tr></table>
+    <h2>4. Legal Coverage</h2><p>The project currently contains <strong>43 curated case patterns across 38 categories</strong>. This is broad coverage for common questions, but not a claim to cover every Indian law, court decision, or State/UT procedure.</p>
+    <ul class="columns"><li>Accident and compensation</li><li>Banking and loans</li><li>Business compliance</li><li>Cheque and debt disputes</li><li>Child welfare and adoption</li><li>Civic nuisance</li><li>Consumer disputes</li><li>Contract disputes</li><li>Criminal procedure</li><li>Cyber fraud</li><li>Defamation</li><li>Disability rights</li><li>Family and relationship matters</li><li>Election and voter issues</li><li>Environment</li><li>Government/service matters</li><li>Housing and RERA</li><li>Immigration and visas</li><li>Insurance</li><li>Intellectual property</li><li>Landlord and tenant issues</li><li>Medical disputes</li><li>Passport matters</li><li>Police complaints</li><li>Privacy and data misuse</li><li>Property and inheritance</li><li>RTI/public records</li><li>Public services</li><li>Rights and discrimination</li><li>Senior citizens</li><li>Student issues</li><li>Tax</li><li>Telecom and internet</li><li>Traffic</li><li>Utilities</li><li>Workplace and salary issues</li><li>Insolvency</li><li>Arbitration and mediation</li></ul>
+  </section>
+
+  <section class="page">
+    <h2>5. Key Features and Improvements</h2>
+    <h3>Safe confidence-based routing</h3><p>The chatbot does not force every message into a legal category. For example, a greeting receives a friendly response. An unclear issue gets a follow-up question. This reduces unrelated or alarming answers.</p>
+    <h3>State/UT context and official sources</h3><p>Users can select an optional State/UT. The response then reminds them that local process can differ. Case responses include official links such as India Code, NALSA, the National Cyber Crime Reporting Portal, RBI, MCA, Passport Seva, Election Commission, IP India, and Income Tax e-Filing.</p>
+    <h3>Emergency escalation</h3><p>Words indicating immediate danger, violence, assault, threats, stalking, blackmail, or self-harm are prioritised for urgent guidance. The system directs the person to call <strong>112</strong> before ordinary legal steps.</p>
+    <h3>Evidence and drafting support</h3><p>Matched cases can show evidence checklists, immediate actions, potential remedies, escalation options, nearby-help maps, ready-to-send email drafts, and short-message drafts.</p>
+    <h3>Mobile and privacy UI updates</h3>
+    <ul><li>The responsive sidebar works on phone, tablet, and desktop layouts.</li><li>The <strong>All Cases</strong> action now explicitly restores the catalogue and smoothly scrolls the internal chat area to it on mobile devices. It no longer relies only on ordinary in-page anchor behaviour.</li><li>The <strong>History &amp; privacy</strong> control uses a blue highlighted treatment with a border, glow, and visible active state. This clearly separates it from ordinary chat suggestions.</li></ul>
+    <h3>Coverage improvement and local catalogue tool</h3><p>Unclassified queries create a local coverage-gap record with confidence and keyword signals only; raw user text is not stored for this purpose. A development-only local JSON import/export tool supports vetted case entries in the current browser.</p>
+  </section>
+
+  <section class="page">
+    <h2>6. History, Privacy, and Safety</h2>
+    <table><tr><th>User choice</th><th>Behaviour</th></tr><tr><td>YES — Save My History</td><td>Stores persistent YES consent and a random browser UUID in cookies. Conversation content is stored locally under that browser ID and can reload later.</td></tr><tr><td>NO — Not Now</td><td>Does not store a persistent NO preference or browser ID. It closes the dialog for the current page and appears again after refresh or a future visit.</td></tr><tr><td>Stop saving history</td><td>Removes persistent consent and browser-ID cookies.</td></tr><tr><td>Delete all saved history</td><td>Removes saved conversations associated with the active browser ID.</td></tr></table>
+    <p>The State/UT setting is session-only. Coverage-gap export stores routing signals, not raw message content.</p>
+    <h2>7. Tests and Verification</h2>
+    <table><tr><th>Test</th><th>Checks</th></tr><tr><td><code>tests/history.test.mjs</code></td><td>New visitor prompt, YES persistence, UUID creation, saved-history loading/deletion, and NO prompt return after refresh.</td></tr><tr><td><code>tests/intents.test.mjs</code></td><td>Routing for added legal categories and safe fallback for unknown issues.</td></tr><tr><td><code>tests/platform-safety.test.mjs</code></td><td>State/UT note, official-source section, 112 escalation, coverage-gap privacy, and local catalogue export.</td></tr></table>
+    <p>Run tests with:</p><p><code>node tests/history.test.mjs</code><br><code>node tests/intents.test.mjs</code><br><code>node tests/platform-safety.test.mjs</code></p>
+    <h2>8. Running the Project</h2><ol><li>Open a terminal in the project folder.</li><li>Run <code>python -m http.server 8080</code>.</li><li>Open <code>http://localhost:8080</code> in a browser.</li><li>Try prompts such as “My landlord is not returning my deposit” or “I lost money in a UPI scam.”</li></ol>
+  </section>
+
+  <section class="page">
+    <h2>9. Limitations and Future Scope</h2>
+    <ul><li>The system provides general information, not final legal advice or legal representation.</li><li>It cannot guarantee 100% legal coverage because laws, local procedures, and court decisions change.</li><li>The present version has no backend, authentication, shared database, or legally reviewed publishing workflow.</li><li>A production system should add a secure backend, role-based access, lawyer/editor review, audit logs, versioned content, rate limits, security review, and scheduled source updates.</li></ul>
+    <h2>10. Viva Questions and Answers</h2>
+    <dl><dt>What is LawMitra AI?</dt><dd>A browser-based legal-guidance and case-routing project for common Indian legal and civic issues.</dd><dt>Does it use a large language model API?</dt><dd>No. This version uses transparent curated data, keywords, and confidence scoring, which makes it easier to explain and test.</dd><dt>How does it avoid wrong classification?</dt><dd>It checks confidence and ambiguity. If the evidence is weak, it asks for clarification instead of guessing.</dd><dt>How is privacy handled?</dt><dd>Saved history is opt-in. YES persists locally; NO is not stored persistently. The project has no server database.</dd><dt>How does it handle emergencies?</dt><dd>Urgent safety indicators are checked before ordinary routing, and the user is directed to 112.</dd><dt>What is the main production limitation?</dt><dd>The app needs a secure backend and professional legal-content review before public deployment.</dd></dl>
+    <h2>11. Conclusion</h2><p>LawMitra AI demonstrates a practical, privacy-conscious way to make legal information easier to understand. It combines curated Indian legal categories, safe routing, evidence and drafting support, official-source links, emergency escalation, mobile-friendly navigation, and user-controlled history. It is suitable as an academic project and a controlled prototype, with a clear path toward a professionally reviewed production platform.</p>
+  </section>
+</body>
+</html>
