@@ -1119,3 +1119,22 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
+
+function initVisualViewport() {
+  const viewport = window.visualViewport;
+  if (!viewport) return;
+
+  const root = document.documentElement;
+  root.classList.add("has-visual-viewport");
+
+  const sync = () => {
+    root.style.setProperty("--visual-vp-height", `${viewport.height}px`);
+    root.style.setProperty("--visual-vp-top", `${viewport.offsetTop}px`);
+  };
+
+  sync();
+  viewport.addEventListener("resize", sync);
+  viewport.addEventListener("scroll", sync);
+}
+
+initVisualViewport();

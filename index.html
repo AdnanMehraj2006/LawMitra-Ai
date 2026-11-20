@@ -154,6 +154,13 @@
       background: var(--bg);
     }
 
+    /* Size the chat shell to the live visual viewport so the composer stays
+       above the on-screen keyboard (which does not resize the layout viewport). */
+    html.has-visual-viewport .app {
+      height: var(--visual-vp-height, 100dvh);
+      top: var(--visual-vp-top, 0);
+    }
+
     .app::before {
       background: #2563eb;
       height: 320px;
@@ -1147,6 +1154,7 @@
       flex: 1;
       flex-direction: column;
       min-width: 0;
+      min-height: 0;
       position: relative;
       height: 100%;
     }
@@ -1291,6 +1299,7 @@
       display: flex;
       flex: 1;
       flex-direction: column;
+      min-height: 0;
       gap: 22px;
       overflow-y: auto;
       padding: clamp(16px, 3vw, 32px) clamp(12px, 4vw, 40px);
